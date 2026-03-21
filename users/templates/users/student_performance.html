@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Student Performance</h2>
+
+<h3>{{ student.name }}</h3>
+
+<table border="1">
+<tr>
+<th>Subject</th>
+<th>Marks</th>
+<th>Grade</th>
+<th>Status</th>
+</tr>
+
+{% for mark in marks %}
+<tr>
+<td>{{ mark.subject.name }}</td>
+<td>{{ mark.marks }}</td>
+<td>{{ mark.grade }}</td>
+<td>{{ mark.status }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

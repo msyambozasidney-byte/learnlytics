@@ -1,0 +1,65 @@
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial;
+        }
+        h1 {
+            text-align: center;
+        }
+        .summary {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: center;
+        }
+        th {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Student Marks Report</h1>
+
+<p><strong>Teacher:</strong> {{ teacher.user.username }}</p>
+<p><strong>School:</strong> {{ teacher.school.name }}</p>
+
+<div class="summary">
+<p><strong>Average Marks:</strong> {{ average_marks }}</p>
+<p><strong>Pass:</strong> {{ pass_count }}</p>
+<p><strong>Fail:</strong> {{ fail_count }}</p>
+</div>
+
+<table>
+<tr>
+    <th>Student</th>
+    <th>Classroom</th>
+    <th>Subject</th>
+    <th>Marks</th>
+    <th>Grade</th>
+    <th>Status</th>
+</tr>
+
+{% for mark in marks_list %}
+<tr>
+    <td>{{ mark.student.name }}</td>
+    <td>{{ mark.student.classroom.name }}</td>
+    <td>{{ mark.subject.name }}</td>
+    <td>{{ mark.marks }}</td>
+    <td>{{ mark.grade }}</td>
+    <td>{{ mark.status }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>
