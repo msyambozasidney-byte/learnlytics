@@ -36,6 +36,8 @@ def calculate_grade(marks):
 
 @login_required
 def dashboard(request):
+    return render(request, 'dashboard.html')
+
     teacher = Teacher.objects.filter(user=request.user).first()
 
     if not teacher:
@@ -82,6 +84,12 @@ def dashboard(request):
     }
         
     return render(request, 'users/dashboard.html', context)
+
+def login_view(request):
+    if request.method == "POST":
+        # after successful login
+        return redirect('dashboard')
+    return render(request, 'login.html')
 
 def pdf_report(request):
 
