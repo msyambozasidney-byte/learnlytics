@@ -1,1 +1,1 @@
-web: gunicorn Learnlytics.wsgi
+web: gunicorn Learnlytics.wsgi:application
