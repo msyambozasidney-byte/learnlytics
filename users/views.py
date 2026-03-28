@@ -15,7 +15,7 @@ from .forms import ClassroomForm
 from .models import Student, Subject, Classroom, Mark, Teacher
 from .forms import SubjectForm
 from django.template.loader import get_template
-from xhtml2pdf import pisa
+# from xhtml2pdf import pisa
 from django.contrib.auth import logout
 
 def logout_user(request):
@@ -92,7 +92,7 @@ def login_view(request):
     return render(request, 'login.html')
 
 def pdf_report(request):
-
+    return HttpResponse("PDF feature coming soon")
     teacher = Teacher.objects.filter(user=request.user).first()
     if not teacher:
         return redirect('/admin/')
