@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key')
 DEBUG = True
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['learnlytics-13.onrender.com']
+ALLOWED_HOSTS = ['.onrender.com']
 
 
 # Application definition
