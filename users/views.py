@@ -18,6 +18,9 @@ from django.template.loader import get_template
 # from xhtml2pdf import pisa
 from django.contrib.auth import logout
 
+def home(request):
+    return HttpResponse("Learnlytics is live")
+
 def logout_user(request):
     logout(request)
     return redirect('/login')
