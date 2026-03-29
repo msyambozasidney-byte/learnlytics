@@ -17,12 +17,9 @@ from .forms import SubjectForm
 from django.template.loader import get_template
 # from xhtml2pdf import pisa
 from django.contrib.auth import logout
-from .models import Group
 
-def home(request):
-    groups = Group.objects.all()
-    return render(request, 'group_list.html', {'groups': groups})
-
+def home (request):
+    return HttpResponse("Learnlytics working step 2")
 
 def logout_user(request):
     logout(request)
