@@ -10,6 +10,7 @@ urlpatterns = [
     path('report/', views.pdf_report, name='pdf_report'),
     
     # logout (simple redirect)
+    path('', views.home, name='home'),
     path('logout/', views.logout_user, name='logout'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),

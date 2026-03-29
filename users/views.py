@@ -93,7 +93,7 @@ def login_view(request):
     if request.method == "POST":
         # after successful login
         return redirect('dashboard')
-    return render(request, 'login.html')
+    return render(request, 'registration/login.html')
 
 def pdf_report(request):
     return HttpResponse("PDF feature coming soon")
