@@ -19,7 +19,7 @@ from django.template.loader import get_template
 from django.contrib.auth import logout
 
 def home (request):
-    return HttpResponse("Learnlytics working step 2")
+    return HttpResponse("Learnlytics is clearn and working")
 
 def logout_user(request):
     logout(request)
