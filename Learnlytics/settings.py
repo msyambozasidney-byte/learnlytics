@@ -60,7 +60,7 @@ ROOT_URLCONF = 'Learnlytics.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'Learnlytics' / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -127,6 +127,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CmpressedManifestStaticFilesStorage'
 
 STATICFILES_DIRS = []
 
-LOGIN_URL = '/login/'
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/login/'
