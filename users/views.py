@@ -19,7 +19,8 @@ from django.template.loader import get_template
 from django.contrib.auth import logout
 
 def home (request):
-    return HttpResponse("Learnlytics is clearn and working")
+    students = Student.objects.all()
+    return render(request, 'home.html', {'students': students})
 
 def logout_user(request):
     logout(request)

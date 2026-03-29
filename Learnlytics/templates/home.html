@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Learnlytics</title>
+</head>
+<body>
+    <h1>Students</h1>
+
+    {% if students %}
+        <ul>
+            {% for student in students %}
+                <li>{{ student }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <P>No students available</P>
+    {% endif %}
+</body>
+</html>
