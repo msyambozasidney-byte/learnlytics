@@ -105,6 +105,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+print("Tmplate DIRS:", [os.path.abspath(d) for d in [BASE_DIR / "templates"]])
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/

@@ -21,7 +21,7 @@ from django.contrib.auth.models import User
 
 
 @login_required
-def home(request):
+def home_view(request):
     return render(request, 'home.html',)
 
 def redirect_if_logged_in(request):

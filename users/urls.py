@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import home_view
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import views as auth_views
 
@@ -11,7 +12,7 @@ urlpatterns = [
     path('report/', views.pdf_report, name='pdf_report'),
     
     # logout (simple redirect)
-    path('', views.home, name='home'),
+    path('', views.home_view, name='home'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
