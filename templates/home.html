@@ -53,7 +53,7 @@ src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <th>Subject</th>
         <th>Mark</th>
     </tr>
-    {% for mark in recent-marks %}
+    {% for mark in recent_marks %}
     <tr>
         <td>{{ mark.student.name }}</td>
         <td>{{ mark.subject.name }}</td>
