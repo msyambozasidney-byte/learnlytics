@@ -1,1 +1,1 @@
-web: gunicorn Learnlytics.wsgi:application
+web: gunicorn Learnlytics.wsgi:application --chdir Learnlytics
