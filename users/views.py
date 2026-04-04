@@ -17,14 +17,16 @@ from .forms import SubjectForm
 from django.template.loader import get_template
 # from xhtml2pdf import pisa
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
 
-def home (request):
-    students = Student.objects.all()
-    return render(request, 'home.html', {'students': students})
 
-def logout_user(request):
-    logout(request)
-    return redirect('/login')
+@login_required
+def home(request):
+    return render(request, 'home.html',)
+
+def redirect_if_logged_in(request):
+    if request.user.is_authenticated:
+        return redirect('home')
 
 def calculate_grade(marks):
     if marks >= 80:

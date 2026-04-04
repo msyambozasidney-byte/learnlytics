@@ -1,19 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Learnlytics</title>
-</head>
-<body>
-    <h1>Students</h1>
+<h1>Welcome to Learnlytics</h1>
 
-    {% if students %}
-        <ul>
-            {% for student in students %}
-                <li>{{ student }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <P>No students available</P>
-    {% endif %}
-</body>
-</html>
+<p>You are logged in as {{ user.username }}</p>
+
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
