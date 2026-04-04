@@ -135,3 +135,7 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = '/login/'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+CSP_FRAME_ANCESTORS = ("https://your-client-doiman.com",)
