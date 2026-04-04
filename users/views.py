@@ -22,7 +22,20 @@ from django.contrib.auth.models import User
 
 @login_required
 def home_view(request):
-    return render(request, 'home.html',)
+    # Fetch counts
+    total_students = Student.objects.count()
+    total_teachers = Teacher.objects.count()
+    total_classes = Classroom.objects.count()
+    total_subjects = Subject.objects.count()
+
+    context = {
+        'total_students': total_students,
+        'total_teachers': total_teachers,
+        'total_classes': total_classes,
+        'total_subjects': total_subjects,
+    }
+
+    return render(request, 'home.html', context)
 
 def redirect_if_logged_in(request):
     if request.user.is_authenticated:
