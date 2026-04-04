@@ -18,7 +18,7 @@ from django.template.loader import get_template
 # from xhtml2pdf import pisa
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
-
+from users.models import Student, Teacher, Classroom, Subject, Mark
 
 @login_required
 def home_view(request):
@@ -27,12 +27,14 @@ def home_view(request):
     total_teachers = Teacher.objects.count()
     total_classes = Classroom.objects.count()
     total_subjects = Subject.objects.count()
+    recent_marks = Mark.objects.order_by('-id')[:5]
 
     context = {
         'total_students': total_students,
         'total_teachers': total_teachers,
         'total_classes': total_classes,
         'total_subjects': total_subjects,
+        'recent_marks': recent_marks,
     }
 
     return render(request, 'home.html', context)

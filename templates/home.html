@@ -12,6 +12,9 @@ border-radius: 10px; width: 180px; text-align: center; box-shadow: 0 2px 5px rgb
 border-radius: 5px; cursor: pointer; }
         button.logout.hover { background: #d32f2f; }
     </style>
+
+<script
+src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <h1>Welcome, {{ user.username }}!</h1>
@@ -39,5 +42,47 @@ border-radius: 5px; cursor: pointer; }
             <p>Subjects</p>
         </div>
     </div>
+<h2>Recent Marks</h2>
+<div>
+    <a href="{% url 'add_student' %}"><button>Add Student</button></a>
+    <a href="{% url 'add_mark' %}"><button>Add Mark</button></a>
+</div>
+<table border="1" cellpadding="10" cellspacing="0">
+    <tr>
+        <th>Student</th>
+        <th>Subject</th>
+        <th>Mark</th>
+    </tr>
+    {% for mark in recent-marks %}
+    <tr>
+        <td>{{ mark.student.name }}</td>
+        <td>{{ mark.subject.name }}</td>
+        <td>{{ mark.score }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No recent marks</td></tr>
+    {% endfor %}
+</table>
 </body>
+
+<canvas id="marksChart" width="400" height="200"></canvas>
+<script>
+    const ctx = document.getElementById('marksChart').getContext('2d');
+    const marksChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for mark in recent_marks %}'{{ mark.student.name }}',{% endfor %}],
+            datasets: [{
+                label: 'Marks'
+                data: [{% for mark in recent_marks %}{{ mark.score }},{% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1 
+            }]
+        },
+        options: {
+            scales: { y: { beginAtZero: true, max: 100 } }
+        }
+    });
+</script>
 </html>
