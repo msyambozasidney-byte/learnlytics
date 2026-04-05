@@ -13,8 +13,6 @@ border-radius: 5px; cursor: pointer; }
         button.logout.hover { background: #d32f2f; }
     </style>
 
-<script
-src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <h1>Welcome, {{ user.username }}!</h1>
@@ -65,24 +63,37 @@ src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </table>
 </body>
 
-<canvas id="marksChart" width="400" height="200"></canvas>
+<script
+src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<canvas id="marksChart"></canvas>
 <script>
-    const ctx = document.getElementById('marksChart').getContext('2d');
-    const marksChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [{% for mark in recent_marks %}'{{ mark.student.name }}',{% endfor %}],
-            datasets: [{
-                label: 'Marks'
-                data: [{% for mark in recent_marks %}{{ mark.score }},{% endfor %}],
-                backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1 
-            }]
-        },
-        options: {
-            scales: { y: { beginAtZero: true, max: 100 } }
-        }
-    });
+document.addEventListener("DOMContentLoaded", function () {
+    const ctx = document.getElementById('marksChart');
+
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for mark in recent_marks %}
+
+"{{ mark.student.name }}"{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Marks',
+                    data: [
+                        {% for mark in recent_marks %}
+
+{{ mark.score }}{% if not forloop.last %},
+{% endif %}
+                        {% endfor %}
+                    ]
+                }]
+            }
+        });
+    }
+});
 </script>
 </html>
