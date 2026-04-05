@@ -40,5 +40,5 @@ class Subject(models.Model):
     
 class Mark(models.Model):
     student = models.ForeignKey('Student', on_delete=models.CASCADE)
-    subject = models.ForeignKey('Subject', on_delete=models.CASCADE)
+    subject = models.CharField(max_length=100)
     score = models.IntegerField()

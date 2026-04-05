@@ -16,9 +16,17 @@ class StudentForm(forms.ModelForm):
 class SubjectForm(forms.ModelForm):
     class Meta:
         model = Subject
-        fields = ['name', 'classroom']
+        fields = ['name']
+
+SUBJECT_CHOICES = [
+    ('Math', 'Math'),
+    ('Science', 'Science'),
+    ('English', 'English'),
+]
 
 class MarkForm(forms.ModelForm):
+    subject = forms.choiceField(choices=SUBJECT_CHOICES)
+
     class Meta:
         model = Mark
         fields = ['student', 'subject', 'score']
