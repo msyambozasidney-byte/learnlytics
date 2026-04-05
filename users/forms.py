@@ -25,7 +25,7 @@ SUBJECT_CHOICES = [
 ]
 
 class MarkForm(forms.ModelForm):
-    subject = forms.choiceField(choices=SUBJECT_CHOICES)
+    subject = forms.ChoiceField(choices=SUBJECT_CHOICES)
 
     class Meta:
         model = Mark
