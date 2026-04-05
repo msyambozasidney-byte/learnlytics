@@ -39,11 +39,6 @@ class Subject(models.Model):
         return self.name
     
 class Mark(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    marks = models.IntegerField()
-    grade = models.CharField(max_length=2)
-    status = models.CharField(max_length=10)
-
-    def __str__(self):
-        return f"{self.student.name} - {self.subject.name}: {self.marks}"
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    subject = models.CharField(max_length=100)
+    score = models.IntegerField()

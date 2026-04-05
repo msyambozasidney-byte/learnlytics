@@ -21,5 +21,5 @@ class SubjectForm(forms.ModelForm):
 class MarkForm(forms.ModelForm):
     class Meta:
         model = Mark
-        fields = ['student', 'subject', 'marks','grade', 'status']
+        fields = ['student', 'subject', 'score']
 
