@@ -171,22 +171,14 @@ def add_classroom(request):
 
 @login_required
 def add_student(request):
-    try:
-        teacher = Teacher.objects.get(user=request.user)
-    except Teacher.DoesNotExist:
-        return redirect('dashboard')
-
     if request.method == 'POST':
         form = StudentForm(request.POST)
         if form.is_valid():
-            student = form.save(commit=False)
-            student.school = teacher.school
-            student.save()
-            messages.success(request, "Student updated successfully.")
-            return redirect('dashboard')
+            form.save()
+            return redirect('home')
     else:
         form = StudentForm()
-    return render(request, 'add_student.html', {'form': form})
+    return render(request, 'users/add_student.html', {'form': form})
 
 def add_subject(request):
     try:
