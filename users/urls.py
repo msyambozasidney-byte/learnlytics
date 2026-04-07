@@ -20,6 +20,7 @@ urlpatterns = [
     path('add-subject/', views.add_subject, name='add_subject'),
     path('add-mark/', views.add_mark, name='add_mark'),
     path('student/<int:student_id>/', views.student_performance, name='student_performance'),
+    path('students/', views.student_list, name='student_list'),
     path('add-student/', views.add_student, name='add_student'),
     path('student-performance/<int:student_id>', views.student_performance, name='student_performance'),
     path('export-pdf/', views.pdf_report, name='export_pdf'),

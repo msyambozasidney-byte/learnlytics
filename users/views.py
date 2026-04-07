@@ -19,6 +19,7 @@ from django.template.loader import get_template
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from users.models import Student, Teacher, Classroom, Subject, Mark
+from django.db.models import Prefetch
 
 @login_required
 def home_view(request):
@@ -179,6 +180,21 @@ def add_student(request):
     else:
         form = StudentForm()
     return render(request, 'users/add_student.html', {'form': form})
+
+def student_list(request):
+    classroom_id = request.GET.get('classroom')
+
+    students = Student.objects.all().prefetch_related('mark_set')
+
+    if classroom_id:
+        students = students.filter(classroom_id=classroom_id)
+
+    classrooms = Classroom.objects.all()
+
+    return render(request, 'users/student_list.html', {
+        'students': students,
+        'classrooms': classrooms,
+    })
 
 def add_subject(request):
     try:
