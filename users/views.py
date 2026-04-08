@@ -60,6 +60,27 @@ def calculate_grade(marks):
 def dashboard(request):
     return render(request, 'dashboard.html')
 
+    students = Students.objects.all()
+    marks = Mark.objects.all()
+    classromms = Classroom.objects.all()
+
+    data = []
+
+    for classroom in classroom:
+        avg_score = Mark.objects.filter(student__classroom=classroom).aggregate(Avg('score')) ['score__avg']
+
+        data.append({
+            'classroom': classroom.name,
+            'avg_score': avg_score or 0,
+            'total_students': Student.objects.filter(classroom=classroom).count()
+        })
+
+        return render(request, 'users/dashboard.html', {
+            'students': students,
+            'marks': marks,
+            'data': data
+        })
+
     teacher = Teacher.objects.filter(user=request.user).first()
 
     if not teacher:

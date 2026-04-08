@@ -37,6 +37,18 @@
     </div>
 </div>
 
+<h2>Class Performance</h2>
+
+<ul>
+{% for item in data %}
+    <li>
+        {{ item.classroom }} | 
+        Avg Score: {{ item.avg_score }} |
+        Stdents: {{ item.total_students }}
+    </li>
+{% endfor %}
+</ul>
+
 <a href="{% url 'export_pdf' %}" style="padding:10px; background:green; color:white;
 text-decoration:none; border-radius:5px;">Dowload PDF Report</a>
 
