@@ -46,6 +46,8 @@
         Avg Score: {{ item.avg_score }} |
         Stdents: {{ item.total_students }}
     </li>
+{% empty %}
+    <li>No data available</li>
 {% endfor %}
 </ul>
 

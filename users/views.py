@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.db.models import Avg, Max, Min
+from django.db.models import Avg, Max, Min, Count
 from .models import Student
 from .forms import StudentForm
 import json
@@ -23,22 +23,60 @@ from django.db.models import Prefetch
 
 @login_required
 def home_view(request):
-    # Fetch counts
-    total_students = Student.objects.count()
-    total_teachers = Teacher.objects.count()
-    total_classes = Classroom.objects.count()
-    total_subjects = Subject.objects.count()
-    recent_marks = Mark.objects.order_by('-id')[:5]
+    students = Student.objects.all()
+    marks = Mark.objects.all()
+    classrooms = Classroom.objects.all()
+    subjects = Subject.objects.all()
+    teachers = Teacher.objects.all()
 
-    context = {
-        'total_students': total_students,
-        'total_teachers': total_teachers,
-        'total_classes': total_classes,
-        'total_subjects': total_subjects,
-        'recent_marks': recent_marks,
-    }
+    labels = []
+    scores = []
 
-    return render(request, 'home.html', context)
+    for classroom in classrooms:
+        labels.append(classroom.name)
+
+        avg = Mark.objects.filter(student__classroom=classroom).aggregate(Avg('score'))['score__avg']
+
+        scores.append(avg or 0)
+
+    data = []
+
+    classrooms = Classroom.objects.all()
+
+    for classroom in classrooms:
+        
+        students_in_class = Student.objects.filter(classroom=classroom)
+
+        marks_in_class = Mark.objects.filter(student__in=students_in_class)
+
+        avg_score = marks_in_class.aggregate(Avg('score'))['score__avg']
+        
+
+        data.append({
+            'classroom': classroom.name,
+            'avg_score': avg_score or 0,
+            'total_students': students_in_class.count()
+        })
+
+    return render(request, 'home.html', {
+        'students': students,
+        'marks': marks,
+        'classroom': classroom,
+        'subjects': subjects,
+
+        # analytics
+        'data': data,
+
+        # cards
+        'student_count': students.count(),
+        'classroom_count': classrooms.count(),
+        'subject_count': subjects.count(),
+        'teacher_count': teachers.count(),
+
+        # chart data
+        'labels': json.dumps(labels),
+        'scores': json.dumps(scores),
+    })
 
 def redirect_if_logged_in(request):
     if request.user.is_authenticated:
@@ -58,75 +96,7 @@ def calculate_grade(marks):
 
 @login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
-
-    students = Students.objects.all()
-    marks = Mark.objects.all()
-    classromms = Classroom.objects.all()
-
-    data = []
-
-    for classroom in classroom:
-        avg_score = Mark.objects.filter(student__classroom=classroom).aggregate(Avg('score')) ['score__avg']
-
-        data.append({
-            'classroom': classroom.name,
-            'avg_score': avg_score or 0,
-            'total_students': Student.objects.filter(classroom=classroom).count()
-        })
-
-        return render(request, 'users/dashboard.html', {
-            'students': students,
-            'marks': marks,
-            'data': data
-        })
-
-    teacher = Teacher.objects.filter(user=request.user).first()
-
-    if not teacher:
-        return redirect('/admin/')
-    
-    classroom_id = request.GET.get('classroom')
-
-    if classroom_id and classroom_id != "ALL":
-        mark_list = marks_list.filter(student__classroom_id=classroom_id)
-
-    # Now filtering works
-    students = Student.objects.filter(classroom__school=teacher.school)
-    subjects = Subject.objects.filter(classroom__school=teacher.school)
-    Classrooms = Classroom.objects.filter(school=teacher.school)
-    marks_list = Mark.objects.filter(student__classroom__school=teacher.school) # Show all marks, not filtered by user
-    print("MARKS COUNT:", marks_list.count())
-
-    if classroom_id:
-        marks_list = marks_list.filter(student__classroom_id=classroom_id)
-
-    average_marks = marks_list.aggregate(Avg('marks'))['marks__avg']
-    highest_marks = marks_list.aggregate(Max('marks'))['marks__max']
-    lowest_marks = marks_list.aggregate(Min('marks'))['marks__min']
-
-    pass_count = marks_list.filter(marks__gte=50).count()
-    fail_count = marks_list.filter(marks__lt=50).count()
-
-    # Chart data
-    marks_qs = marks_list.values('student__name').annotate(avg_marks=Avg('marks'),
-        highest=Max('marks'),
-        lowest=Min('marks'))
-
-    context = {
-        'students': students,
-        'subjects': subjects,
-        'classrooms': Classrooms,
-        'marks_list': marks_list,
-        'marks_qs': marks_qs,
-        'average_marks': average_marks,
-        'highest_marks': highest_marks,
-        'lowest_marks': lowest_marks,
-        'pass_count': pass_count,
-        'fail_count': fail_count, 
-    }
-        
-    return render(request, 'users/dashboard.html', context)
+    return render(request)
 
 def login_view(request):
     if request.method == "POST":
@@ -210,7 +180,7 @@ def student_list(request):
     if classroom_id:
         students = students.filter(classroom_id=classroom_id)
 
-    classrooms = Classroom.objects.all()
+    classrooms = Classroom.objects.filter(student__mark__isnull=False).distinct()
 
     return render(request, 'users/student_list.html', {
         'students': students,

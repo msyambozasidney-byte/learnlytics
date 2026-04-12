@@ -22,79 +22,85 @@ border-radius: 5px; cursor: pointer; }
     </form>
 
     <h2>Dashboard</h2>
+
     <div class="cards-container">
         <div class="card">
-            <h2>{{ total_students }}</h2>
+            <h2>{{ student_count }}</h2>
             <p>Students</p>
         </div>
         <div class="card">
-            <h2>{{ total_teachers }}</h2>
+            <h2>{{ teacher_count }}</h2>
             <p>Teachers</p>
         </div>
         <div class="card">
-            <h2>{{ total_classes }}</h2>
+            <h2>{{ classroom_count }}</h2>
             <p>Classes</p>
         </div>
         <div class="card">
-            <h2>{{ total_subjects }}</h2>
+            <h2>{{ subject_count }}</h2>
             <p>Subjects</p>
         </div>
     </div>
-<h2>Recent Marks</h2>
+
+<h3>Class Performance</h3>
+
+<ul>
+{% for item in data %}
+    <li>
+        {{ item.classroom }} |
+        Avg Score: {{ item.avg_score }} |
+        Students: {{ item.total_students }}
+    </li>
+{% endfor %}
+</ul>
+
 <div>
     <a href="{% url 'add_student' %}"><button>Add Student</button></a>
     <a href="{% url 'add_mark' %}"><button>Add Mark</button></a>
     <a href="{% url 'student_list' %}">View Students</a>
 </div>
-<table border="1" cellpadding="10" cellspacing="0">
-    <tr>
-        <th>Student</th>
-        <th>Subject</th>
-        <th>Mark</th>
-    </tr>
-    {% for mark in recent_marks %}
-    <tr>
-        <td>{{ mark.student.name }}</td>
-        <td>{{ mark.subject.name }}</td>
-        <td>{{ mark.score }}</td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="3">No recent marks</td></tr>
-    {% endfor %}
+
+<h3>Recent Marks</h3>
+
+<table border="1">
+<tr>
+    <th>Student</th>
+    <th>Subject</th>
+    <th>Score</th>
+</tr>
+
+{% for mark in marks %}
+<tr>
+    <td>{{ mark.student }}</td>
+    <td>{{ mark.subject }}</td>
+    <td>{{ mark.score }}</td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="3">No data available</td>
+</tr>
+{% endfor %}
 </table>
 </body>
 
 <script
 src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<canvas id="marksChart"></canvas>
+<canvas id="myChart"></canvas>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const ctx = document.getElementById('marksChart');
+const labels = {{ labels|safe}};
+const data = {{ scores|safe }};
 
-    if (ctx) {
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: [
-                    {% for mark in recent_marks %}
-
-"{{ mark.student.name }}"{% if not forloop.last %},{% endif %}
-                    {% endfor %}
-                ],
-                datasets: [{
-                    label: 'Marks',
-                    data: [
-                        {% for mark in recent_marks %}
-
-{{ mark.score }}{% if not forloop.last %},
-{% endif %}
-                        {% endfor %}
-                    ]
-                }]
-            }
-        });
+new
+Chart(document.getElementById('myChart'), {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Scores',
+            data: data
+        }]
     }
-});
+})
 </script>
 </html>
