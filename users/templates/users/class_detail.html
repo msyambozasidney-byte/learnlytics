@@ -1,0 +1,71 @@
+<h1>{{ classroom.name }} Dashboard</h1>
+
+<h2>Students</h2>
+{% for student in students %}
+  <a href="{% url 'student_detail' student.id %}">
+    {{ student.name }}
+  </a>
+{% endfor %}
+
+<hr>
+
+<p>Students: {{ students.count }}</p>
+<p>Class Avg: {{ class_avg }}</p>
+<p>Top Student: {{ top_student }}</p>
+
+<h2>Marks</h2>
+{% for mark in marks %}
+  <p>{{ mark.student.name }} - {{ mark.subject.name }}: {{ mark.score }}</p>
+{% endfor %}
+
+<a href="{% url 'class_report_pdf' classroom.id %}" class="btn btn-success mb-3">
+  Download Class Report
+</a>
+
+{% block content %} 
+
+<h4>Student Performance</h4>
+<canvas id="studentChart"></canvas>
+
+<h4 style="margin-top:40px;">Subject Performance</h4>
+<canvas id="subjectChart"></canvas>
+
+<script
+src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+
+<script>
+// DIRECT injection (simple + reliable)
+const studentLabels = {{ student_names|safe }};
+const studentData = {{ student_averages|safe }};
+
+const subjectLabels = {{ subject_names|safe }};
+const subjectData = {{ subject_averages|safe }};
+
+// STUDENT CHART 
+new
+Chart(document.getElementById('studentChart'), {
+  type: 'bar',
+  data: {
+    labels: studentLabels,
+    datasets: [{
+      label: 'Student Averages',
+      data: studentData 
+    }]
+  }
+});
+
+// SUBJECT CHART  
+new
+Chart(document.getElementById('subjectChart'), {
+  type: 'bar',
+  data: {
+    labels: subjectLabels,
+    datasets: [{
+      label: 'Subject Averages',
+      data: subjectData
+    }]
+  }
+});
+</script>
+
+{% endblock %}

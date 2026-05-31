@@ -1,7 +1,50 @@
-<h2>Add Marks</h2>
+{% extends 'base_dashboard.html' %}
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Marks</button>
-</form>
+{% block content %}
+
+<div class="container mt-4">
+    <h>Add Marks</h>
+    <div class="card p-4 shadow-sm">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label>Select Student</label>
+                <select name="student" class="form-control">
+                    {% for student in students %}
+                        <option value="{{ student.id }}">
+                            {{ student.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label>Select Subject</label>
+                <select name="subject" class="form-control">
+                    {% for subject in subjects %}
+                        <option value="{{ subject.id }}">
+                            {{ subject.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label>Score</label>
+                <input
+                    type="number"
+                    name="score"
+                    class="form-control"
+                    placeholder="Enter score"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                Save Mark
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

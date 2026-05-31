@@ -1,0 +1,68 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h1>School Settengs</h1>
+
+    <hr>
+
+    <div class="card p-4 shadow-sm">
+
+        <h3>School Information</h3>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="mb-3">
+
+                <label>School Name</label>
+
+                <input
+                    type="text"
+                    name="school_name"
+                    class="form-control" value="{{ school.name }}">
+
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+
+                Save Changes
+                
+            </button>
+
+        </form>
+
+    </div>
+
+    <br>
+
+    <div class="card p-4 shadow-sm">
+
+        <h3>School Statistics</h3>
+
+        <p>Total Classes: {{ school.classroom_set.count }}</p>
+
+        <p>Total Students: {{ school.student_set.count }}</p>
+
+    </div>
+
+    <br>
+
+    <div class="card p-4 shadow-sm">
+
+        <h3>Apperance</h3>
+
+        <button onclick="toggleDarkMode()" class="btn btn-dark">
+
+            Toggle Dark Mode
+
+        </button>
+
+    </div>
+
+</div>
+
+{% endblock %}

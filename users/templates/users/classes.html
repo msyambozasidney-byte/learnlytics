@@ -1,0 +1,25 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+
+<h class="mb-4">Classes</h>
+
+<div class="row">
+    {% for classroom in classrooms %}
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm p-3">
+
+                <h5>{{ classroom.name }}</h5>
+
+                <a href="{% url 'class_detail' classroom.id %}" class="btn btn-primary mt-2">
+                    View Class Performance
+                </a>
+
+            </div>
+        </div>
+    {% empty %}
+        <p>No classes available</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

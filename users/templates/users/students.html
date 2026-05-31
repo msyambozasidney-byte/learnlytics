@@ -1,0 +1,27 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h1>Students</h1>
+    <p>Total Students: {{ students.count }}</p>
+
+    <hr>
+    {% for student in students %}
+        <div class="card p-3 mb-3 shadow-sm">
+            <h4>{{ student.name }}</h4>
+            <p>
+                Classroom: {{ student.classroom.name }}
+            </p>
+            <a href="{% url 'student_report_pdf' student.id %}" class="btn btn-primary btn-sm">
+                Download PDF
+            </a>
+        </div>
+    {% empty %}
+        <div class="alert alert-warning">
+            No students found
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

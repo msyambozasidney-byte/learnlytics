@@ -1,159 +1,18 @@
-{% extends 'base.html' %}
+{% extends 'base_dashboard.html' %}
 
 {% block content %}
 
-<h1> Students Marks Dashboard</h1>
+<div class="container-fluid">
+    <div class="row">
 
-<h2>Teacher Actions</h2>
+        <div class="col-md-10 p-4">
+            <h2>Welcome, {{ request.user.username }}</h2>
+            <p class="text-muted">
+                Learnlytics School Analytics Dashboard
+            </p>
 
-<div class="mb-3">
-    <a href="{% url 'add_classroom' %}" class="btn btn-primary">Add Classroom</a>
-    <a href="{% url 'add_student' %}" class="btn btn-success">Add Student</a>
-    <a href="{% url 'add_subject' %}" class="btn btn-warning">Add Subject</a>
-    <a href="{% url 'add_mark' %}" class="btn btn-info">Enter Marks</a>
-    <a href="{% url 'export_pdf' %}" class="btn btn-dark">Download PDF</a>
-    <a href="{% url 'student_list' %}">View Students</a>
-</div>
-
-<!-- Statistics -->
-<div class="row mb-4">
-    <div class="col-md-4">
-        <div class="card p-3 shadow">
-            <h5>Average Marks</h5>
-            <h3>{{ average_marks }}</h3>
-        </div>
-    </div>
-    <div class="col-mid-4">
-        <div class="card p-3 shadow">
-            <h5>Highest Marks</h5>
-            <h3>{{ highest_marks }}</h3>
-        </div>
-    </div>
-    <div class="col-mid-4">
-        <div class="card p-3 shadow">
-            <h5>Lowest Marks</h5>
-            <h3>{{ lowest_marks }}</h3>
         </div>
     </div>
 </div>
-
-<h2>Class Performance</h2>
-
-<ul>
-{% for item in data %}
-    <li>
-        {{ item.classroom }} | 
-        Avg Score: {{ item.avg_score }} |
-        Stdents: {{ item.total_students }}
-    </li>
-{% empty %}
-    <li>No data available</li>
-{% endfor %}
-</ul>
-
-<a href="{% url 'export_pdf' %}" style="padding:10px; background:green; color:white;
-text-decoration:none; border-radius:5px;">Dowload PDF Report</a>
-
-<h3>Student Performance</h3>
-<canvas id="marksChart" width="400" height="150"></canvas>
-
-<!-- Pie Chart -->
-<h3>Pass vs Fail</h3>
-<canvas id="passFailChart"></canvas>
-
-<!-- Table -->
-<table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>Student</th>
-            <th>Classroom</th>
-            <th>Subject</th>
-            <th>Marks</th>
-            <th>Grade</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tboby>
-        {% for mark in marks_list %}
-        <tr>
-            <td>{{ mark.student.name }}</td>
-            
-            <td>{{ mark.student.classroom.name }}</td>
-            <td>{{ mark.subject.name }}</td>
-            <td>{{ mark.marks }}</td>
-            <td>{{ mark.grade }}</td>
-            <td>{{ mark.status }}</td>
-
-            <td>
-            <a href="{% url 'student_performance' mark.student.id %}" class="btn
-btn-sm btn-primary">View Performance</a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="7" class="text-center">No marks found</td>
-        </tr>
-        {% endfor %}
-    </tboby>
-</table>
-
-<form method="get">
-    <label>Select Classroom:</label>
-    <select name="classroom">
-        <option value="">All</option>
-        {% for c in classrooms %}
-            <option
-value="{{ c.id }}">{{ c.name }}</option>
-        {% endfor %}
-    </select>
-    <button type="submit">Filter</button>
-</form>
-
-<!-- Chart -->
-<canvas id="marksChart" style="margin-top: 30px;"></canvas>
-
-<script
-src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const labels = [
-        {% for item in marks_qs %}
-            "{{ item.student__name }}",
-        {% endfor %}
-    ];
-
-    const data = [
-        {% for item in marks_qs %}
-            {{ item.avg_marks }}
-        {% endfor %}
-    ];
-
-    const ctx = document.getElementById('marksChart').getContext('2d');
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Average Marks',
-                data: data,
-            }]
-        }
-    });
-</script>
-
-<script>
-    const passFailCtx = document.getElementById('passFailChart').getContext('2d');
-
-    new Chart(passFailCtx, {
-        type: 'pie',
-        data: {
-            labels: ['Pass', 'Fail'],
-            datasets: [{
-                data: [{{ pass_count }}, {{ fail_count }}],
-            }]
-        }
-    })
-</script>
 
 {% endblock %}

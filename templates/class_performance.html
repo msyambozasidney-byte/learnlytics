@@ -1,0 +1,126 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+
+<h1>Class Performance</h1>
+
+<form method="GET">
+    <select name="class" onchange="this.form.submit()">
+        <option value="">All Classes</option>
+
+        {% for class in classes %}
+            <option value="{{ class.id }}"
+                {% if selected_class == class.id|stringformat:"s" %}selected{% endif %}>
+                {{ class.name }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+<hr>
+
+{% for student in students %}
+    <div style="margin-bottom: 15px;">
+        <strong>{{ student.name }}</strong>
+
+        {% if student.avg_score is not None %}
+            Overall:{{ student.avg_score|floatformat:1 }}
+        {% else %}
+            No marks yet
+        {% endif %}
+
+        <ul>
+            {% for subject, avg in student.subject_performance.items %}
+                <li>{{ subject }}: {{ avg|floatformat:1 }}</li>
+            {% empty %}
+                <li>No subject data</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endfor %}
+
+<h3>
+    Class Average:
+    {% if class_avg %}
+        {{ class_avg|floatformat:1 }}
+    {% else %}
+        No data
+    {% endif %}
+</h3>
+
+<H3>
+    Top Student:
+    {% if top_student %}
+        {{ top_student.name }}
+({{ top_student.avg_score|floatformat:1 }})
+    {% else %}
+        No data 
+    {% endif %}
+</H3>
+
+<script
+src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<h2>Performance Chart</h2>
+
+<canvas id="performanceChart" width="400" height="200"></canvas>
+
+<script>
+    const labels = {{ student_names|safe }}; 
+    const data = {{ student_averages|safe }};
+
+
+
+    const ctx = document.getElementById('performanceChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Average Score',
+                    data: data,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            } 
+        })
+</script>
+
+<h2>Subject Performance Chart</h2>
+<canvas id="subjectChart" width="400" height="200"></canvas>
+
+<script>
+    const subjectLabels = JSON.parse('{{ subject_names|escapejs }}');
+    const subjectData = JSON.parse('{{ subject_averages|escapejs }}');
+
+    const ctx2 = document.getElementById('subjectChart');
+
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: subjectLabels,
+            datasets: [{
+                label: 'Average Score per Subject',
+                data: subjectData
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

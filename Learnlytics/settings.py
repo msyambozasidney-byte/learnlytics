@@ -131,11 +131,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CmpressedManifestStaticFilesStorage'
 STATICFILES_DIRS = []
 
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = '/login/'
+LOGIN_REDIRECT_URL = '/users/dashboard/'
+LOGOUT_REDIRECT_URL = '/'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 CSP_FRAME_ANCESTORS = ("https://your-client-doiman.com",)
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

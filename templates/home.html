@@ -1,4 +1,258 @@
-<!DOCTYPE html>
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+
+<h1>Welcome, {{ user.username }}!</h1>
+
+<h1>Dashboard</h1>
+
+<div class="mb-3">
+    <a href="{% url 'setup_school' %}" class="btn btn-dark">Setup Guide</a>
+    <a href="{% url 'add_classroom' %}" Class="btn btn-warning">+ Add Class</a>
+    <a href="{% url 'add_student' %}" class="btn btn-success">+ Add Student</a>
+    <a href="{% url 'add_subject' %}" class="btn btn-dark">+ Add Subject</a>
+    <a href="{% url 'add_mark' %}" class="btn btn-warning">+ Add Mark</a>
+    <a href="{% url 'school_report_pdf' %}" class="btn btn-success">
+        Download School Report
+    </a>
+</div>
+
+<div class="container-fluid">
+<div class="row g-4 mb-4">
+
+    <!-- Total StudentS -->
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+
+            <h6 class="text-muted">
+                Total Students
+            </h6>
+
+            <h2 class="fw-bold">
+                {{ total_students }}
+            </h2>
+
+        </div>
+    </div>
+
+    <!-- Total Classes -->
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+
+            <h6 class="text-muted">
+                Total Classes
+            </h6>
+
+            <h2 class="fw-bold">
+                {{ total_classes }}
+            </h2>
+
+        </div>
+    </div>
+
+    <!-- Total Subjects -->
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+
+            <h6 class="text-muted">
+                Total Subjects
+            </h6>
+
+            <h2 class="fw-bold">
+                {{ total_subjects }}
+            </h2>
+
+        </div>
+    </div>
+
+    <!-- Average Performance -->
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+
+            <h6 class="text-muted">
+                Average Performance
+            </h6>
+
+            <h2 class="fw-bold">
+                {{ overall_average }}%
+            </h2>
+
+        </div>
+    </div>
+
+</div>
+</div>
+
+<div class="row mt-4">
+
+    <!-- Top Students -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm border-0 rounded-4 p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h4 class="fw-bold">
+                    Top Performance Students
+                </h4>
+
+                <span class="badge bg-success">
+                    Top 5
+                </span>
+
+            </div>
+
+            <table class="table table-hover align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Average</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for student in top_students %}
+                    <tr>
+                        <td>
+                            {{ student.name }}
+                        </td>
+
+                        <td>
+                            <span class="badge bg-primary">
+                                {{ student.avg_score|floatformat:1 }}%
+                            </span>
+                        </td>
+                    </tr>
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="2">
+                            No student data available
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- Weak Subjects -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow-sm border-0 rounded-4 p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h4 class="fw-bold">
+                    Weak Subjects
+                </h4>
+
+                <span class="badge bg-danger">
+                    Attention Needed
+                </span>
+
+            </div>
+
+            <table class="table table-hover align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Average</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for subject in weak_subjects %}
+
+                    <tr>
+                        <td>
+                            {{ subject.name }}
+                        </td>
+
+                        <td>
+                            <span class="badge bg-danger">
+                                {{ subject.avg_score|floatformat:1 }}%
+                            </span>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="2">
+                            No subject data available
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>    
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm boder-0 rounded-4 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h4 class="fw-bold">
+                    Students At Risk
+                </h4>
+
+                <span class="badge bg-danger">
+                    Intervention Needed
+                </span>
+
+            </div>
+
+            <table class="table table-hover align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Class</th>
+                        <th>Average</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for student in students_at_risk %}
+                    <tr>
+                        <td>
+                            {{ student.name }}
+                        </td>
+                        <td>
+                            {{ student.classroom }}
+                        </td>
+                        <td>
+                            <span class="badge bg-danger">
+                                {{ student.avg_score|floatformat:1 }}%
+                            </span>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">
+                            No at-risk student found
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+</div>
+
 <html>
 <head>
     <title>Learnlytics Dashboard</title>
@@ -15,49 +269,34 @@ border-radius: 5px; cursor: pointer; }
 
 </head>
 <body>
-    <h1>Welcome, {{ user.username }}!</h1>
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit" class="logout">Logout</button>
-    </form>
+    
+<h3>Filter by Class</h3>
+<form method="GET">
+  <select name="class">
+    <option value="">All Classes</option>
 
-    <h2>Dashboard</h2>
+    {% for classroom in classrooms %}
+      <option value="{{ classroom.id }}">
+        {{ classroom.name }}
+      </option>
+    {% endfor %}
 
-    <div class="cards-container">
-        <div class="card">
-            <h2>{{ student_count }}</h2>
-            <p>Students</p>
-        </div>
-        <div class="card">
-            <h2>{{ teacher_count }}</h2>
-            <p>Teachers</p>
-        </div>
-        <div class="card">
-            <h2>{{ classroom_count }}</h2>
-            <p>Classes</p>
-        </div>
-        <div class="card">
-            <h2>{{ subject_count }}</h2>
-            <p>Subjects</p>
-        </div>
-    </div>
+  </select>
+  <button type="submit">Filter</button>  
+</form>
 
-<h3>Class Performance</h3>
+<h5>Students</h5>
 
 <ul>
-{% for item in data %}
-    <li>
-        {{ item.classroom }} |
-        Avg Score: {{ item.avg_score }} |
-        Students: {{ item.total_students }}
-    </li>
-{% endfor %}
+    {% for student in students %}
+        <li>{{ student.name }}</li>
+    {% empty %}
+        <li>No students available</li>
+    {% endfor %}
 </ul>
 
 <div>
-    <a href="{% url 'add_student' %}"><button>Add Student</button></a>
-    <a href="{% url 'add_mark' %}"><button>Add Mark</button></a>
-    <a href="{% url 'student_list' %}">View Students</a>
+    <a href="{% url 'students' %}">View Students</a>
 </div>
 
 <h3>Recent Marks</h3>
@@ -83,24 +322,44 @@ border-radius: 5px; cursor: pointer; }
 </table>
 </body>
 
+
+<div style="width: 700px; height: 350px;">
+
+    <h3 class="mb-4">School Performance by Class</h3>
+
+    <canvas id="classPerformanceChart"></canvas>
+
+</div>
+
+{{ class_names|json_script:"class-names" }}
+{{ class_averages|json_script:"class-averages" }}
+
 <script
 src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<canvas id="myChart"></canvas>
 <script>
-const labels = {{ labels|safe}};
-const data = {{ scores|safe }};
+const classNames = JSON.parse(document.getElementById('class-names').textContent);
+const classAverages = JSON.parse(document.getElementById('class-averages').textContent);
 
-new
-Chart(document.getElementById('myChart'), {
+const ctx = document.getElementById('classPerformanceChart');
+
+new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: labels,
+        labels: classNames,
         datasets: [{
-            label: 'Scores',
-            data: data
+            label: 'Class Average',
+            data: classAverages
         }]
+    },
+
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
     }
-})
+});
 </script>
+
 </html>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h1>Welcome to Learnlytics</h1>
+    <p>Let's set up your school step-by-step.</p>
+
+    <hr>
+
+    <!-- CLASSROOM -->
+    <div class="card p-4 mb-4">
+        <h3>Step 1 - Add Your First Classroom</h3>
+        <a href="{% url 'add_classroom' %}" class="btn btn-primary">
+            Add Classroom
+        </a>
+    </div>
+
+    <!-- SUBJECT -->
+    <div class="card p-4 mb-4">
+        <h3>Step 2 - Add Subjects</h3>
+        <a href="{% url 'add_subject' %}" class="btn btn-success">
+            Add Subject
+        </a>
+    </div>
+
+    <!-- STUDENT -->
+    <div class="card p-4 mb-4">
+        <h3>Step 3 - Add Students</h3>
+        <a href="{% url 'add_student' %}" class="btn btn-warning">
+            Add Student
+        </a>
+    </div>
+
+    <!-- MARKS -->
+    <div class="card p-4 mb-4">
+        <h3>Step 4 - Add Marks</h3>
+        <a href="{% url 'add_mark' %}" class="btn btn-dark">
+            Add Marks
+        </a>
+    </div>
+</div>
+
+{% endblock %}
